@@ -31,8 +31,8 @@ sponge {
         description("Prevents players from being above the roof of the Nether")
         links {
             // homepage("https://spongepowered.org")
-            // source("https://spongepowered.org/source")
-            // issues("https://spongepowered.org/issues")
+            source("https://github.com/dtkdtk/No-nether-roof")
+            issues("https://github.com/dtkdtk/No-nether-roof/issues")
         }
         dependency("spongeapi") {
             loadOrder(PluginDependency.LoadOrder.AFTER)
