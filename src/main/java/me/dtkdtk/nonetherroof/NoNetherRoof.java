@@ -14,7 +14,8 @@ import java.nio.file.Path;
 @Plugin(
         id = "no_nether_roof",
         name = "NoNetherRoof",
-        version = "1.0"
+        version = "1.0-sponge7",
+        description = "Prevents players from being above the roof of the Nether"
 )
 public class NoNetherRoof {
 

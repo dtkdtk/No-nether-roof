@@ -7,8 +7,9 @@ plugins {
 }
 
 group = "me.dtkdtk"
-version = "1.0"
+val spongeMajorVersion = "7"
 val spongeApiVersion = "7.4.0"
+version = "1.0-sponge$spongeMajorVersion"
 
 repositories {
     mavenCentral()
@@ -27,7 +28,7 @@ sponge {
     plugin("no_nether_roof") {
         displayName("NoNetherRoof")
         entrypoint("me.dtkdtk.nonetherroof.NoNetherRoof")
-        description("Prevents players from being above the roof of Nether")
+        description("Prevents players from being above the roof of the Nether")
         links {
             // homepage("https://spongepowered.org")
             // source("https://spongepowered.org/source")
