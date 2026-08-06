@@ -17,7 +17,7 @@ The plugin just teleports the player 2 blocks down if they are above the `roofY`
 1. Configurable `roofY` coordinate
 2. Configurable deny message
 3. 2 ways to show deny message: actionbar (default) and chat
-4. Checks can be disabled by adding the `nonetherroof.bypass` permission
+4. Checks can be disabled by adding the `no_nether_roof.bypass` permission
 
 
 ## [Source code](https://github.com/dtkdtk/No-nether-roof)

@@ -41,7 +41,7 @@ public class NetherRoofListener {
     }
 
     private void performCheck(Player player) {
-        if (player.hasPermission("nonetherroof.bypass")) return;
+        if (player.hasPermission("no_nether_roof.bypass")) return;
 
         World world = player.getWorld();
         if (!world.getDimension().getType().equals(DimensionTypes.NETHER)) return;
