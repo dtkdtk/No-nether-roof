@@ -1,1 +1,1 @@
-rootProject.name = "NoNetherRoof"
+rootProject.name = "No_nether_roof"

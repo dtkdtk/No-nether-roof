@@ -13,8 +13,8 @@ import java.nio.file.Path;
 
 @Plugin(
         id = "no_nether_roof",
-        name = "NoNetherRoof",
-        version = "1.0-sponge7",
+        name = "No_nether_roof",
+        version = "1.1-sponge7",
         description = "Prevents players from being above the roof of the Nether"
 )
 public class NoNetherRoof {
@@ -32,7 +32,7 @@ public class NoNetherRoof {
     public void onServerStart(GameStartedServerEvent event) {
         config = new Config(configDir);
         config.load();
-        logger.info("NoNetherRoof plugin loaded");
+        logger.info("No_nether_roof plugin loaded");
 
         Sponge.getEventManager().registerListeners(this, new NetherRoofListener(config, this));
     }
@@ -41,6 +41,6 @@ public class NoNetherRoof {
     public void onReload(GameReloadEvent e) {
         if (config == null) return;
         config.load();
-        logger.info("NoNetherRoof plugin configuration reloaded");
+        logger.info("No_nether_roof plugin configuration reloaded");
     }
 }

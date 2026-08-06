@@ -21,7 +21,7 @@ public class Config {
     private boolean useActionBar;
 
     public Config(Path configDir) {
-        this.configPath = configDir.resolve("NoNetherRoof.conf");
+        this.configPath = configDir.resolve("No_nether_roof.conf");
     }
 
     public void load() {
