@@ -1,6 +1,10 @@
 # No nether roof
 
+[![Ore Downloads](https://img.shields.io/ore/dt/no_nether_roof
+)](https://ore.spongepowered.org/dtkdtk/No-nether-roof)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+[Ore project page & downloads](https://ore.spongepowered.org/dtkdtk/No-nether-roof)
 
 A Sponge plugin that prevents players from being above the roof of the Nether. It just teleports them 2 blocks down.
 
