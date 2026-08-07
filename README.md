@@ -8,7 +8,7 @@
 
 A Sponge plugin that prevents players from being above the roof of the Nether. It just teleports them 2 blocks down.
 
-**This version (1.0-sponge7) requires Sponge API v8 (minecraft 1.16.5)**. Other versions can be found in the [Branches](https://github.com/dtkdtk/No-nether-roof/branches) tab.
+**This version (1.1-sponge8) requires Sponge API v8 (minecraft 1.16.5)**. Other versions can be found in the [Branches](https://github.com/dtkdtk/No-nether-roof/branches) tab.
 
 
 ## How does it work
