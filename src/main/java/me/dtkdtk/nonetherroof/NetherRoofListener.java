@@ -1,71 +1,73 @@
 package me.dtkdtk.nonetherroof;
 
-import org.spongepowered.api.entity.living.player.Player;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
-import org.spongepowered.api.event.network.ClientConnectionEvent;
+import org.spongepowered.api.event.network.ServerSideConnectionEvent;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.serializer.TextSerializers;
-import org.spongepowered.api.text.title.Title;
-import org.spongepowered.api.world.DimensionTypes;
-import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.server.ServerLocation;
+import org.spongepowered.api.world.server.ServerWorld;
+import org.spongepowered.plugin.PluginContainer;
 
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class NetherRoofListener {
 
     private final Config config;
-    private final NoNetherRoof plugin;
+    private final PluginContainer container;
     private final Set<UUID> pendingTeleports = new HashSet<>();
+    private final LegacyComponentSerializer legacySerializer = LegacyComponentSerializer.legacyAmpersand();
 
-    public NetherRoofListener(Config config, NoNetherRoof plugin) {
+    public NetherRoofListener(Config config, PluginContainer container) {
         this.config = config;
-        this.plugin = plugin;
+        this.container = container;
     }
 
     @Listener(order = Order.EARLY)
     public void onPlayerMove(MoveEntityEvent event) {
-        if (!(event.getTargetEntity() instanceof Player)) return;
-        performCheck((Player) event.getTargetEntity());
+        if (!(event.entity() instanceof ServerPlayer)) return;
+        performCheck((ServerPlayer) event.entity());
     }
 
     @Listener
-    public void onPlayerJoin(ClientConnectionEvent.Join event) {
-        performCheck(event.getTargetEntity());
+    public void onPlayerJoin(ServerSideConnectionEvent.Join event) {
+        performCheck(event.player());
     }
 
-    private void performCheck(Player player) {
+    private void performCheck(ServerPlayer player) {
         if (player.hasPermission("no_nether_roof.bypass")) return;
 
-        World world = player.getWorld();
-        if (!world.getDimension().getType().equals(DimensionTypes.NETHER)) return;
+        ServerWorld world = player.world();
+        String dimensionId = world.key().asString();
+        if (!dimensionId.equals("minecraft:the_nether")) return;
 
-        double y = player.getLocation().getY();
+        double y = player.position().y();
         int roofY = config.getRoofY();
         if (y >= roofY) {
-            if (pendingTeleports.contains(player.getUniqueId())) {
+            if (pendingTeleports.contains(player.uniqueId())) {
                 return;
             }
             scheduleTeleport(player, roofY);
         }
     }
 
-    private void scheduleTeleport(Player player, int roofY) {
-        UUID uuid = player.getUniqueId();
+    private void scheduleTeleport(ServerPlayer player, int roofY) {
+        UUID uuid = player.uniqueId();
         if (pendingTeleports.contains(uuid)) return;
         pendingTeleports.add(uuid);
 
-        Task.builder()
+        Task task = Task.builder()
                 .execute(() -> {
                     try {
                         if (player.isOnline()) {
-                            double currentY = player.getLocation().getY();
+                            double currentY = player.position().y();
                             if (currentY >= roofY) {
                                 teleportBelowRoof(player, roofY);
                                 tellPlayer(player);
@@ -75,24 +77,27 @@ public class NetherRoofListener {
                         pendingTeleports.remove(uuid);
                     }
                 })
-                .delay(1, TimeUnit.MILLISECONDS)
-                .submit(plugin);
+                .plugin(container)
+                .delay(Duration.ofMillis(1))
+                .build();
+
+        Sponge.server().scheduler().submit(task);
     }
 
-    private void teleportBelowRoof(Player player, int roofY) {
-        Location<World> loc = player.getLocation();
+    private void teleportBelowRoof(ServerPlayer player, int roofY) {
+        ServerLocation loc = player.serverLocation();
         int teleportYOffset = 2;
         int newY = roofY - teleportYOffset;
         if (newY < 0) newY = 0;
-        Location<World> newLoc = new Location<>(loc.getExtent(), loc.getX(), newY, loc.getZ());
+        ServerLocation newLoc = ServerLocation.of(loc.world(), loc.x(), newY, loc.z());
         player.setLocation(newLoc);
     }
 
-    private void tellPlayer(Player player) {
+    private void tellPlayer(ServerPlayer player) {
         String msg = config.getDenyMessage();
-        Text txt = TextSerializers.FORMATTING_CODE.deserialize(msg);
+        Component txt = legacySerializer.deserialize(msg);
         if (config.getUseActionBar()) {
-            player.sendTitle(Title.builder().actionBar(txt).build());
+            player.sendActionBar(txt);
         } else {
             player.sendMessage(txt);
         }

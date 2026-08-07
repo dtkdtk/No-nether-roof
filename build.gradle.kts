@@ -7,8 +7,8 @@ plugins {
 }
 
 group = "me.dtkdtk"
-val spongeMajorVersion = "7"
-val spongeApiVersion = "7.4.0"
+val spongeMajorVersion = "8"
+val spongeApiVersion = "8.2.0"
 version = "1.1-sponge$spongeMajorVersion"
 
 repositories {
@@ -42,8 +42,8 @@ sponge {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -51,7 +51,6 @@ tasks.withType<JavaCompile>().configureEach {
         encoding = "utf-8"
     }
 }
-
 
 tasks.withType<AbstractArchiveTask>().configureEach {
     isReproducibleFileOrder = true

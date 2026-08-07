@@ -1,8 +1,9 @@
 package me.dtkdtk.nonetherroof;
 
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
+import org.spongepowered.configurate.loader.ConfigurationLoader;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -13,7 +14,7 @@ public class Config {
     private CommentedConfigurationNode root;
 
     private final int defaultRoofY = 127;
-    private final String defaultDenyMessage = "&4You can't be above the roof of Nether!";
+    private final String defaultDenyMessage = "&4You can't be above the roof of the Nether!";
     private final boolean defaultUseActionBar = true;
 
     private int roofY;
@@ -26,15 +27,15 @@ public class Config {
 
     public void load() {
         try {
-            ConfigurationLoader<CommentedConfigurationNode> loader = HoconConfigurationLoader.builder().setPath(configPath).build();
+            ConfigurationLoader<CommentedConfigurationNode> loader = HoconConfigurationLoader.builder().path(configPath).build();
             root = loader.load();
             if (!configPath.toFile().exists()) {
                 setDefaults();
                 loader.save(root);
             }
-            roofY = root.getNode("roofY").getInt(defaultRoofY);
-            denyMessage = root.getNode("denyMessage").getString(defaultDenyMessage);
-            useActionBar = root.getNode("useActionBar").getBoolean(defaultUseActionBar);
+            roofY = root.node("roofY").getInt(defaultRoofY);
+            denyMessage = root.node("denyMessage").getString(defaultDenyMessage);
+            useActionBar = root.node("useActionBar").getBoolean(defaultUseActionBar);
         } catch (IOException e) {
             //noinspection CallToPrintStackTrace
             e.printStackTrace();
@@ -42,9 +43,13 @@ public class Config {
     }
 
     private void setDefaults() {
-        root.getNode("roofY").setValue(defaultRoofY);
-        root.getNode("denyMessage").setValue(defaultDenyMessage);
-        root.getNode("useActionBar").setValue(defaultUseActionBar);
+        try {
+            root.node("roofY").set(Integer.class, defaultRoofY);
+            root.node("denyMessage").set(String.class, defaultDenyMessage);
+            root.node("useActionBar").set(Boolean.class, defaultUseActionBar);
+        } catch (SerializationException e) {
+            //never happens
+        }
     }
 
     public int getRoofY() {
