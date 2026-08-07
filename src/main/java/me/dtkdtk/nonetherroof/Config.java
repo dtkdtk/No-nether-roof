@@ -13,7 +13,7 @@ public class Config {
     private CommentedConfigurationNode root;
 
     private final int defaultRoofY = 127;
-    private final String defaultDenyMessage = "&4You can't be above the roof of Nether!";
+    private final String defaultDenyMessage = "&4You can't be above the roof of the Nether!";
     private final boolean defaultUseActionBar = true;
 
     private int roofY;
